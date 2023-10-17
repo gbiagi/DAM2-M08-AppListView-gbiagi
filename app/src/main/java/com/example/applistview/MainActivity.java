@@ -1,16 +1,18 @@
 package com.example.applistview;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
     // Model: Record (intents=puntuació, nom)
     static class Record {
         public int intents;
@@ -26,11 +28,36 @@ public class MainActivity extends AppCompatActivity {
 
     // ArrayAdapter serà l'intermediari amb la ListView
     ArrayAdapter<Record> adapter;
+    ArrayList<String> nomsRandom = new ArrayList<>();
+    ArrayList<String> cognomsRandom = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        cognomsRandom.add("Suarez");
+        cognomsRandom.add("Perez");
+        cognomsRandom.add("Costa");
+        cognomsRandom.add("Garcia");
+        cognomsRandom.add("Lopez");
+        cognomsRandom.add("Fernandez");
+        cognomsRandom.add("Rossi");
+        cognomsRandom.add("Vitale");
+        cognomsRandom.add("Coppola");
+        cognomsRandom.add("Leone");
+
+        nomsRandom.add("Andrea");
+        nomsRandom.add("Juan");
+        nomsRandom.add("Jesus");
+        nomsRandom.add("David");
+        nomsRandom.add("Lorenzo");
+        nomsRandom.add("Pablo");
+        nomsRandom.add("Andres");
+        nomsRandom.add("Elena");
+        nomsRandom.add("Francisco");
+        nomsRandom.add("Sebastian");
+
 
         // Inicialitzem model
         records = new ArrayList<Record>();
@@ -50,14 +77,20 @@ public class MainActivity extends AppCompatActivity {
                     // inicialitzem l'element la View amb el seu layout
                     convertView = getLayoutInflater().inflate(R.layout.list_item, container, false);
                 }
+                // Creamos el imageView para cambiar la imagen luego
+                //ImageView imagen = findViewById(R.id.fotoPerfil);
+                switch (getRandomNumber()){
+                    case 0: ((ImageView) convertView.findViewById(R.id.fotoPerfil)).setImageResource(R.drawable.img1); break;
+                    case 1: ((ImageView) convertView.findViewById(R.id.fotoPerfil)).setImageResource(R.drawable.img2); break;
+                    case 2: ((ImageView) convertView.findViewById(R.id.fotoPerfil)).setImageResource(R.drawable.img3); break;
+                }
+                Log.i("INFO","El número introduït és: " + getRandomNumber());
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.nom)).setText(getItem(pos).nom);
                 ((TextView) convertView.findViewById(R.id.intents)).setText(Integer.toString(getItem(pos).intents));
                 return convertView;
             }
-
         };
-
         // busquem la ListView i li endollem el ArrayAdapter
         ListView lv = (ListView) findViewById(R.id.recordsView);
         lv.setAdapter(adapter);
@@ -68,11 +101,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for (int i=0;i<500;i++) {
-                    records.add(new Record(100, "Anonymous"));
+                    int rand1 = (int)(Math.random() * 10);
+                    int rand2 = (int)(Math.random() * 10);
+                    records.add(new Record((int)(Math.random() * 100), nomsRandom.get(rand1) + " " + cognomsRandom.get(rand2)));
                 }
                 // notificar l'adapter dels canvis al model
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+    public int getRandomNumber() {
+        return (int)(Math.random()*3);
     }
 }
