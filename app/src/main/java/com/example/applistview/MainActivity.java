@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity {
     // Model: Record (intents=puntuació, nom)
@@ -109,6 +111,23 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+        Button ordenar = findViewById(R.id.button2);
+        ordenar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Sort the records ArrayList based on the 'intents' field in ascending order
+                Collections.sort(records, new Comparator<Record>() {
+                    @Override
+                    public int compare(Record record1, Record record2) {
+                        return Integer.compare(record1.intents, record2.intents);
+                    }
+                });
+
+                // Notify the adapter of the data change
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
     public int getRandomNumber() {
         return (int)(Math.random()*3);
